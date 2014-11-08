@@ -15,3 +15,4 @@ install-server:
 	echo 'deb http://downloads-distro.mongodb.org/repo/ubuntu-upstart dist 10gen' | sudo tee /etc/apt/sources.list.d/mongodb.list
 	sudo apt-get update
 	sudo apt-get install -y mongodb-org
+ 	sudo service mongod start
