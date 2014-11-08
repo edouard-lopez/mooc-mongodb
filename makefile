@@ -21,10 +21,10 @@ run-hello-world:
 # Install virtual environment (allow specific version of python)
 create-virtualenv: install-pip
 	printf "/!\\ untested\n"
-	pip install virtualenvwrapper
-	export WORKON_HOME=~/.virtualenvs && mkdir -p $WORKON_HOME \
+	export WORKON_HOME=$$HOME/.virtualenvs && mkdir -p $${WORKON_HOME} || true \
 	source /usr/local/bin/virtualenvwrapper.sh \
-	mkvirtualenv -a $(pwd) --python=/usr/bin/python3.4 ${PROJECT} -i bottle -i pymongo3 \
+	mkvirtualenv -a $${PWD} --python=/usr/bin/python3.4 ${PROJECT} && workon \
+	pip install bottle pymongo \
 	pip freeze > requirements.pip
 
 install-pip:
@@ -33,6 +33,7 @@ install-pip:
 	wget -O /tmp/get-pip.py https://bootstrap.pypa.io/get-pip.py
 	python /tmp/get-pip.py
 	pip install -U pip
+	pip install virtualenv{,wrapper}
 
 fix-config:
 	printf "Changing 'dbpath'\n"
