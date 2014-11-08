@@ -20,7 +20,10 @@ run-hello-world:
 
 # Install virtual environment (allow specific version of python)
 create-virtualenv:
-	mkvirtualenv -a $(pwd) --python=python3 ${PROJECT} -i bottle
+	pip install virtualenvwrapper
+	export WORKON_HOME=~/.virtualenvs && mkdir -p $WORKON_HOME \
+	source /usr/local/bin/virtualenvwrapper.sh \
+	mkvirtualenv -a $(pwd) --python=/usr/bin/python3.4 ${PROJECT} -i bottle -i pymongo3 \
 	pip freeze > requirements.pip
 
 fix-config:
