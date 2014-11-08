@@ -18,13 +18,6 @@ run-hello-world:
 	printf "Try opening: %s\n" "http://localhost:8080/hello/ed"
 	python ./hello.py
 
-install-pip:
-	printf "/!\\ untested\n"
-	sudo apt-get install python
-	wget -O /tmp/get-pip.py https://bootstrap.pypa.io/get-pip.py
-	python /tmp/get-pip.py
-	pip install -U pip
-
 # Install virtual environment (allow specific version of python)
 create-virtualenv: install-pip
 	printf "/!\\ untested\n"
@@ -33,6 +26,13 @@ create-virtualenv: install-pip
 	source /usr/local/bin/virtualenvwrapper.sh \
 	mkvirtualenv -a $(pwd) --python=/usr/bin/python3.4 ${PROJECT} -i bottle -i pymongo3 \
 	pip freeze > requirements.pip
+
+install-pip:
+	printf "/!\\ untested\n"
+	sudo apt-get install python
+	wget -O /tmp/get-pip.py https://bootstrap.pypa.io/get-pip.py
+	python /tmp/get-pip.py
+	pip install -U pip
 
 fix-config:
 	printf "Changing 'dbpath'\n"
