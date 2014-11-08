@@ -9,6 +9,13 @@
 
 # force use of Bash
 SHELL := /bin/bash
+PROJECT:=mooc-mongodb
+
+
+# Install virtual environment (allow specific version of python)
+create-virtualenv:
+	mkvirtualenv -a $(pwd) --python=python3 ${PROJECT} -i bottle
+	pip freeze > requirements.pip
 
 install-server:
 	sudo apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv 7F0CEB10
