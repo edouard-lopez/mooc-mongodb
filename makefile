@@ -11,6 +11,9 @@
 SHELL := /bin/bash
 PROJECT:=mooc-mongodb
 
+run-hello-world:
+	printf "Try opening: %s\n" "http://localhost:8080/hello/ed"
+	python ./hello.py
 
 # Install virtual environment (allow specific version of python)
 create-virtualenv:
