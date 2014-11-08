@@ -25,7 +25,8 @@ create-virtualenv:
 
 fix-config:
 	printf "Changing 'dbpath'\n"
-	[[ ! -d ${DB_PATH} ]] && mkdir -p ${DB_PATH} || true
+	[[ ! -d ${DB_PATH} ]] && mkdir -p "${DB_PATH}" || true
+	sudo chown -R mongodb:mongodb "${DB_PATH}"
 	sudo sed -i -r -e "s!^dbpath=.+!dbpath=${DB_PATH}!g" /etc/mongod.conf
 
 install-server:
