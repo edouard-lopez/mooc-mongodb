@@ -36,4 +36,6 @@ install-server:
 		|| true
 	sudo apt-get update
 	sudo apt-get install -y mongodb-org
- 	sudo service mongod start
+
+install: install-server fix-config
+	sudo service mongod restart
