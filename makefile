@@ -18,8 +18,16 @@ run-hello-world:
 	printf "Try opening: %s\n" "http://localhost:8080/hello/ed"
 	python ./hello.py
 
+install-pip:
+	printf "/!\\ untested\n"
+	sudo apt-get install python
+	wget -O /tmp/get-pip.py https://bootstrap.pypa.io/get-pip.py
+	python /tmp/get-pip.py
+	pip install -U pip
+
 # Install virtual environment (allow specific version of python)
-create-virtualenv:
+create-virtualenv: install-pip
+	printf "/!\\ untested\n"
 	pip install virtualenvwrapper
 	export WORKON_HOME=~/.virtualenvs && mkdir -p $WORKON_HOME \
 	source /usr/local/bin/virtualenvwrapper.sh \
