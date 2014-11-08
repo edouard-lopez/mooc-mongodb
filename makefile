@@ -11,6 +11,9 @@
 SHELL := /bin/bash
 PROJECT:=mooc-mongodb
 
+# default is /var/lib/mongodb, but I use small root partition which cause the service to fail to start
+DB_PATH:=/mnt/data/server/mongodb
+
 run-hello-world:
 	printf "Try opening: %s\n" "http://localhost:8080/hello/ed"
 	python ./hello.py
@@ -19,6 +22,11 @@ run-hello-world:
 create-virtualenv:
 	mkvirtualenv -a $(pwd) --python=python3 ${PROJECT} -i bottle
 	pip freeze > requirements.pip
+
+fix-config:
+	printf "Changing 'dbpath'\n"
+	[[ ! -d ${DB_PATH} ]] && mkdir -p ${DB_PATH} || true
+	sudo sed -i -r -e "s!^dbpath=.+!dbpath=${DB_PATH}!g" /etc/mongod.conf
 
 install-server:
 	sudo apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv 7F0CEB10
