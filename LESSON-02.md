@@ -266,3 +266,49 @@ WriteResult({ "nInserted" : 1 })
     reviews : [ { user : "fred", comment : "bouhuoho" , rating : 2 }]
 })
 ```
+
+## Cursor
+
+Allows to programmatically iterate over results.
+
+```js
+> cur=db.people.find(); null
+null
+> cur.hasNext()
+true
+> cur.next()
+{ "_id" : ObjectId("5461eb5b45e2803c66a83e8b"), "a" : 1 }
+>
+```
+
+* `null` prevent query to be executed ;
+* `limit()` limit the number of documents return by query. (Modify information send to server) ;
+* `sort()` sort results on given fields and order. (Modify information send to server).
+* `skip()` skip `n` results. (Modify information send to server).
+
+```js
+> cur=db.people.find().limit(3); null
+null
+> cur.sort({name: 1});
+{ "_id" : ObjectId("5461eb5b45e2803c66a83e8b"), "a" : 1 }
+{ "_id" : ObjectId("54620e37051168018d06d832"), "name" : 23, "age" : 20 }
+{ "_id" : ObjectId("546211cf051168018d06d834"), "name" : "Charline", "age" : 21, "height" : 182, "email" : "pom@toto.com" }
+
+> cur=db.people.find().limit(3); null
+null
+> cur.sort({name: -1});
+{ "_id" : ObjectId("5461ef9045e2803c66a83e8d"), "name" : "yug", "age" : 30 }
+{ "_id" : ObjectId("5461ef8545e2803c66a83e8c"), "name" : "haricot", "age" : 29 }
+{ "_id" : ObjectId("54620f52051168018d06d833"), "name" : "Eten", "age" : 20, "height" : 183 }
+```
+
+ From the `scores` collection retrieves _exam_ documents, sorted by `score` in descending order, skipping the first `50` 
+ and showing only the next `20`.
+ 
+```js
+> db.scores.find({"type": "exam"}).sort({"score": -1}).skip(50).limit(20)
+{ "_id" : ObjectId("5461f330051168018d06d4ba"), "student" : 704, "type" : "exam", "score" : 5 }
+{ "_id" : ObjectId("5461f330051168018d06d68b"), "student" : 859, "type" : "exam", "score" : 5 }
+{ "_id" : ObjectId("5461f331051168018d06d80e"), "student" : 988, "type" : "exam", "score" : 5 }
+{ "_id" : ObjectId("5461f32f051168018d06cda9"), "student" : 101, "type" : "exam", "score" : 6 }
+```
