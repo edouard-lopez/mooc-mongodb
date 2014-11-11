@@ -246,3 +246,23 @@ Enumeration of all the values we are looking for.
 { "_id" : ObjectId("5461ef9045e2803c66a83e8d"), "name" : "yug", "age" : 30 }
 { "_id" : ObjectId("54620f52051168018d06d833"), "name" : "Eten", "age" : 20, "height" : 183 }
 ```
+
+## Queries with Dot Notation
+
+To access information un sub-document, simply write the path to it separating level with do (e.g.: `reviews.rating`).
+
+**Note:** In find queries for sub-document **fields order is relevant**, as BSON representations will differ if you 
+change order.
+
+```js
+> db.catalog.insert({ product : "Super Duper-o-phonic",
+    price : 100000000000,
+    reviews : [ { user : "fred", comment : "Great!" , rating : 5 },
+                { user : "tom" , comment : "I agree with Fred, somewhat!" , rating : 4 } ]
+})
+WriteResult({ "nInserted" : 1 })
+> db.catalog.insert({ product : "Super Duper-o-phonic",
+    price : 300000000000,
+    reviews : [ { user : "fred", comment : "bouhuoho" , rating : 2 }]
+})
+```
