@@ -312,3 +312,19 @@ null
 { "_id" : ObjectId("5461f331051168018d06d80e"), "student" : 988, "type" : "exam", "score" : 5 }
 { "_id" : ObjectId("5461f32f051168018d06cda9"), "student" : 101, "type" : "exam", "score" : 6 }
 ```
+
+##  Counting Results
+
+```js
+> db.scores.count()
+4181
+> db.scores.count({type: "exam"})
+1000
+```
+
+Count the documents in the `scores` collection where the `type` was _essay_ and the `score` was greater than `90`?
+
+```js
+> db.scores.count({type: "essay", score: {$gt: 90}})
+100
+```
