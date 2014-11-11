@@ -395,3 +395,17 @@ Remove fields
 `$pushAll` add several elements (e.g. `… {$pushAll: {a: [ 5, 6, 7 ]} …`
 `$pullAll`, remove several values
 `$addToSet`
+
+## Upserts
+
+Update or create an object
+
+```js
+db.users.update({name: "George"}, { $set: {age: 40}}, { upsert: true })
+WriteResult({
+        "nMatched" : 0,
+        "nUpserted" : 1,
+        "nModified" : 0,
+        "_id" : ObjectId("54622845dcfb94bfdb97a822")
+})
+```
