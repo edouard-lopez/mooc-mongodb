@@ -328,3 +328,70 @@ Count the documents in the `scores` collection where the `type` was _essay_ and 
 > db.scores.count({type: "essay", score: {$gt: 90}})
 100
 ```
+
+## Updating of a Document
+
+First argument is same as in `find()`. Second argument is the document used to replace existing content (existing 
+data may be discarded).
+ 
+**Note:** Non-specified **fields will be removed!**.
+  
+```js
+> db.people.update({"name" : "haricot"})
+{ "_id" : ObjectId("5461ef8545e2803c66a83e8c"), "name" : "haricot", "age" : 29 }
+
+> // change first letter of the name
+> db.people.update({"name" : "haricot"}, {"name" : "Haricot"})
+WriteResult({ "nMatched" : 1, "nUpserted" : 0, "nModified" : 1 })
+
+// age field has been removed!
+> db.people.update({"name" : "haricot"})
+{ "_id" : ObjectId("5461ef8545e2803c66a83e8c"), "name" : "Haricot" }
+```
+
+### `$set` Command
+ 
+Update or create fields, **conserving other fields**.
+
+```js
+> db.people.update({"name" : "Haricot"}, {$set: {"age" : 29}})
+WriteResult({ "nMatched" : 1, "nUpserted" : 0, "nModified" : 1 })
+
+// age has been restored
+> db.people.find({name: "Haricot"})
+{ "_id" : ObjectId("5461ef8545e2803c66a83e8c"), "name" : "Haricot", "age" : 29 }
+```
+
+### `$inc` Command
+
+Increment an existing fields by the given amount. If the fields doesn't exists it is created with the `$inc` 
+value.
+
+```js
+> db.people.update({"name" : "Haricot"}, {$inc: {"age" : -2}})
+WriteResult({ "nMatched" : 1, "nUpserted" : 0, "nModified" : 1 })
+> db.people.find({name: "Haricot"})
+{ "_id" : ObjectId("5461ef8545e2803c66a83e8c"), "name" : "Haricot", "age" : 27 }
+```
+
+> db.users.insert({ "_id" : "myrnarackham", "phone" : "301-512-7434", "country" : "US" })
+WriteResult({ "nInserted" : 1 })
+> db.users.update({_id: "myrnarackham"}, {$set: {country: "RU"}})
+WriteResult({ "nMatched" : 1, "nUpserted" : 0, "nModified" : 1 })
+
+### `$unset` Command
+
+Remove fields
+
+```js
+> db.users.update({_id: whatever}, {$unset: {fieldstoremoe: 1}} )
+```
+
+### Using `$push`, `$pop`, `$pull`, `$pushAll`, `$pullAll`, `$addToSet`
+
+`$push` add ;
+`$pop` remove by index ;
+`$pull` remove a value from array ;
+`$pushAll` add several elements (e.g. `… {$pushAll: {a: [ 5, 6, 7 ]} …`
+`$pullAll`, remove several values
+`$addToSet`
