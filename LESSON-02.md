@@ -87,3 +87,38 @@ Without arguments, `find()` returns all documents from collection.
 When specifying multiple critera, the default behavior is a boolean **AND**.
 
 db.scores.find({"type": "essay", "score":50}, {student: true, _id: false})
+
+## Comparison query operators: `$lt` and `$gt` (`$lte` and `$gte`)
+
+Query operators should be provided as a subdocument, with _key_ being the _query operator_ and the _value_ being the 
+value to compare agains:  
+
+```js
+> // lower than 1
+> db.scores.find({type: "essay", score:{ $lt: 1} }) 
+{ "_id" : ObjectId("5461f32e051168018d06cccc"), "student" : 27, "type" : "essay", "score" : 0 }
+{ "_id" : ObjectId("5461f32f051168018d06cf57"), "student" : 244, "type" : "essay", "score" : 0 }
+> // between 40 and 42, without the _id field
+> db.scores.find({type: "essay", score:{ $gt: 40, $lt: 42} }, {_id: false})
+{ "student" : 16, "type" : "essay", "score" : 41 }
+{ "student" : 33, "type" : "essay", "score" : 41 }
+```
+
+Also work as lexicographically comparator: 
+```js
+> // user name starting with letter after 'p' 
+> db.people.find({name: {$gt: "p"}}, {_id: false})
+{ "name" : "yug", "age" : 30 }
+```
+**Note:** MongoDB has no locale awareness, it follows UTF-8 code unit byte order.
+
+Operations are strongly and dynamically typed, so even if it schemaless, a lexicographically comparison will be 
+limited to document with corresponding field as string. If we insert a new entry to the `people` collection with an 
+integer name, neither comparison will return it :
+```js
+> db.people.insert({"name": 23, age: 20})
+> db.people.find({name: {$gt: "p"}}, {_id: false})
+{ "name" : "yug", "age" : 30 }
+> db.people.find({name: {$lt: "p"}}, {_id: false})
+{ "name" : "haricot", "age" : 29 }
+```
