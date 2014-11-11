@@ -88,7 +88,7 @@ When specifying multiple critera, the default behavior is a boolean **AND**.
 
 db.scores.find({"type": "essay", "score":50}, {student: true, _id: false})
 
-## Comparison query operators: `$lt` and `$gt` (`$lte` and `$gte`)
+### Comparison query operators: `$lt` and `$gt` (`$lte` and `$gte`)
 
 Query operators should be provided as a subdocument, with _key_ being the _query operator_ and the _value_ being the 
 value to compare agains:  
@@ -121,4 +121,51 @@ integer name, neither comparison will return it :
 { "name" : "yug", "age" : 30 }
 > db.people.find({name: {$lt: "p"}}, {_id: false})
 { "name" : "haricot", "age" : 29 }
+```
+
+### Using regexes, `$exists` and `$type`
+
+#### Find document **having fields `f`**:
+
+```js
+> db.people.insert({"name": "Eten", age: 20, height: 183})
+WriteResult({ "nInserted" : 1 })
+
+> // with field 'height'
+> db.people.find({height: {$exists: true} })
+{ "_id" : ObjectId("54620f52051168018d06d833"), "name" : "Eten", "age" : 20, "height" : 183 }
+
+> // withOUT field 'height'
+> db.people.find({height: {$exists: false} })
+{ "_id" : ObjectId("5461eb5b45e2803c66a83e8b"), "a" : 1 }
+{ "_id" : ObjectId("5461ef8545e2803c66a83e8c"), "name" : "haricot", "age" : 29 }
+{ "_id" : ObjectId("5461ef9045e2803c66a83e8d"), "name" : "yug", "age" : 30 }
+{ "_id" : ObjectId("54620e37051168018d06d832"), "name" : 23, "age" : 20 }
+```
+
+#### Find document with fields of a **given type `t`** 
+
+Where `t` is a numeric value from [BSON type spec](http://bsonspec.org/spec.html): `1` for _integer_, `2` for _string_, etc.
+
+```js
+> db.people.find({name: {$type: 1} })
+{ "_id" : ObjectId("54620e37051168018d06d832"), "name" : 23, "age" : 20 }
+```
+
+#### Find document **matching regex `re`** 
+
+Use PCRE regular expression
+
+```js
+> db.people.find({name: {$regex: "[ae]"} })
+{ "_id" : ObjectId("5461ef8545e2803c66a83e8c"), "name" : "haricot", "age" : 29 }
+{ "_id" : ObjectId("54620f52051168018d06d833"), "name" : "Eten", "age" : 20, "height" : 183 }
+```
+
+Write a query that retrieves documents from a `people` collection where the name has a `h` in it, and the document has 
+an `email` field.
+
+```js
+> db.people.find({name: {$regex: "h"}, email: {$exists: true} })
+{ "_id" : ObjectId("546211cf051168018d06d834"), "name" : "Charline", "age" : 21, "height" : 182, "email" : "pom@toto.com" }
 ```
