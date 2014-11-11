@@ -439,3 +439,45 @@ WriteResult({ "nRemoved" : 1 })
 
 **Note:** document removal is atomic
 **Note:** multi-document removal is not atomic.
+
+
+# Homeworks
+
+## 2.1 
+
+Find all `exam` scores _greater than or equal_ to `65`, and _sort_ those `score`s from _lowest to highest_. 
+
+```js
+db.grades.find({type: "exam", score: {$gte: 65}}, {_id: false}).sort({score: 1})
+db.grades.find({type: "homework"}).sort({student_id: 1, score: 1})
+```
+
+ 
+## 2.2
+
+Write a program in the language of your choice that will remove the grade of type "homework" with the lowest score for each student from the dataset that you imported in HW 2.1. Since each document is one grade, it should remove one document per student.
+
+```js
+prev_student = null;
+cur = db.grades.find({type: "homework"}).sort({student_id: 1, score: 1}); null;
+while (cur.hasNext()) {
+    current = cur.next();
+    if (prev_student == null || current["student_id"] != prev_student["student_id"]) {
+        printjson(current["student_id"]);
+        printjson(current['score']);
+        printjson(current['_id']);
+        db.grades.remove(current['_id'])
+    }
+    prev_student = current;
+}
+```
+
+## 2.3
+
+```py
+# find the request user validate_login()
+user = self.users.find_one({'_id': username})
+…
+# insert new user in add_user()
+self.users.insert(user)
+```
