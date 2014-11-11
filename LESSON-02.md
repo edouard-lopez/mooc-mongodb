@@ -208,3 +208,41 @@ Similar to `$or` but less relevant as it's the default boolean operator
 > db.scores.find( { score : { $gt : 50 }, score : { $lt : 60 } } )
 > last constraint replace the first one!
 ```
+
+##  Querying Inside Arrays: `$all` and `$in`
+
+is transparent. There is **no recursion**, mongodb will just look at the top level of the specified field.
+
+```js
+> db.accounts.insert({name: "George", favorites: ["ice scream", "pretzels" ]})
+WriteResult({ "nInserted" : 1 })
+> db.accounts.insert({name: "Howard", favorites: ["pretzels", "beer" ]})
+WriteResult({ "nInserted" : 1 })
+
+> db.accounts.find({favorites: "pretzels"})
+{ "_id" : ObjectId("54621643c328b9d1f3ad36dd"), "name" : "George", "favorites" : [ "ice scream", "pretzels" ] }
+{ "_id" : ObjectId("54621657c328b9d1f3ad36de"), "name" : "Howard", "favorites" : [ "pretzels", "beer" ] }
+> db.accounts.find({favorites: "beer"})
+{ "_id" : ObjectId("54621657c328b9d1f3ad36de"), "name" : "Howard", "favorites" : [ "pretzels", "beer" ] }
+```
+
+### `$all`
+
+Matches all document that **satisfies –at least– all criteria of the `$all`-key object**. Fields order is irrelevant.
+ 
+```js
+> db.accounts.find({favorites: {$all: ["pretzels", "beer"] }})
+{ "_id" : ObjectId("54621657c328b9d1f3ad36de"), "name" : "Howard", "favorites" : [ "pretzels", "beer" ] }
+```
+
+Valid documents can have more fields than the one specified.
+
+### `$in`
+
+Enumeration of all the values we are looking for.
+
+```js
+> db.people.find({name: {$in: ["yug", "Eten"] }})
+{ "_id" : ObjectId("5461ef9045e2803c66a83e8d"), "name" : "yug", "age" : 30 }
+{ "_id" : ObjectId("54620f52051168018d06d833"), "name" : "Eten", "age" : 20, "height" : 183 }
+```
