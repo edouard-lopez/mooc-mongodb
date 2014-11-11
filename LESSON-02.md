@@ -408,7 +408,7 @@ WriteResult({
         "nModified" : 0,
         "_id" : ObjectId("54622845dcfb94bfdb97a822")
 })
-``````
+```
 
 ##  Multi-update
 
@@ -422,6 +422,19 @@ WriteResult({ "nMatched" : 7, "nUpserted" : 0, "nModified" : 7 })
 > db.people.find()
 { "_id" : ObjectId("5461ef8545e2803c66a83e8c"), "name" : "Haricot", "age" : 27, "country" : "FR" }
 { "_id" : ObjectId("5461ef9045e2803c66a83e8d"), "name" : "yug", "age" : 30, "country" : "FR" }
+```
+
+**Note:** document removal is atomic
+**Note:** multi-document removal is not atomic.
+
+## Remove data: `remove()`, `drop()`
+
+* remove all document in a collection: `db.people.remove( {} )` (one by one removal)
+* drop a whole collection: `db.people.drop()` (a lot faster)
+
+```js
+> db.people.remove({_id: ObjectId("5461eb5b45e2803c66a83e8b") })
+WriteResult({ "nRemoved" : 1 })
 ```
 
 **Note:** document removal is atomic
