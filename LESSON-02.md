@@ -169,3 +169,42 @@ an `email` field.
 > db.people.find({name: {$regex: "h"}, email: {$exists: true} })
 { "_id" : ObjectId("546211cf051168018d06d834"), "name" : "Charline", "age" : 21, "height" : 182, "email" : "pom@toto.com" }
 ```
+
+## Boolean operators: `$or` and `$and`
+ 
+### `$or` operator
+
+`$or` is a prefix operator, it takes an array as its value and it come before the sub-queries it connects together. 
+Sub-queries are items of that array `$or`. 
+array
+
+```js
+> db.people.find({$or: [{name: {$regex: "e$"}}, {age: {$exists: true}} ] } )
+{ "_id" : ObjectId("5461ef8545e2803c66a83e8c"), "name" : "haricot", "age" : 29 }
+{ "_id" : ObjectId("5461ef9045e2803c66a83e8d"), "name" : "yug", "age" : 30 }
+{ "_id" : ObjectId("54620e37051168018d06d832"), "name" : 23, "age" : 20 }
+{ "_id" : ObjectId("54620f52051168018d06d833"), "name" : "Eten", "age" : 20, "height" : 183 }
+{ "_id" : ObjectId("546211cf051168018d06d834"), "name" : "Charline", "age" : 21, "height" : 182, "email" : "pom@toto.com" }
+```
+
+How would you find all documents in the `scores` collection where the `score` is less than `50` or greater than `90`?
+
+```js
+> db.scores.find({$or: [{score: {$lt: 50}}, {score: {$gt: 90}}]})
+{ "_id" : ObjectId("5461f32e051168018d06cc7b"), "student" : 0, "type" : "essay", "score" : 24 }
+{ "_id" : ObjectId("5461f32e051168018d06cc81"), "student" : 2, "type" : "essay", "score" : 11 }
+{ "_id" : ObjectId("5461f32e051168018d06cc82"), "student" : 2, "type" : "quiz", "score" : 7 }
+{ "_id" : ObjectId("5461f32e051168018d06cc83"), "student" : 3, "type" : "exam", "score" : 8 }
+{ "_id" : ObjectId("5461f32e051168018d06cc84"), "student" : 3, "type" : "essay", "score" : 49 }
+…
+```
+
+### `$and` operator
+
+Similar to `$or` but less relevant as it's the default boolean operator
+
+```js
+> // Careful!
+> db.scores.find( { score : { $gt : 50 }, score : { $lt : 60 } } )
+> last constraint replace the first one!
+```
