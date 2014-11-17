@@ -96,4 +96,15 @@ embedded. Hence the importance of embedding. So there is several approach:
 3. tolerate a bit of inconsistency (no need to be perfectly in-sync).
 
 Following operations are atomic in MongoDB: `update`, `findAndModify`, `$addToSet` (within update), `$push` (within 
-update) 
+update) update) 
+
+## One to One Relations
+
+Straight-forward modeling in MongoDB (Employee 1:1 Resume)
+
+* consider how you are going to access your data ? Encourage embedding or not ;
+
+Why keep related document in separate collection ?
+
+* are you accessing/updating some part really often ? So it might be better to split to reduce working set size of your app ;
+* if one document is > 16Mb you won't be able to embed
