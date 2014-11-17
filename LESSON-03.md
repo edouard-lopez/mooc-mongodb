@@ -96,11 +96,13 @@ embedded. Hence the importance of embedding. So there is several approach:
 3. tolerate a bit of inconsistency (no need to be perfectly in-sync).
 
 Following operations are atomic in MongoDB: `update`, `findAndModify`, `$addToSet` (within update), `$push` (within 
-update) update) 
+update) 
 
 ## One to One Relations
 
-Straight-forward modeling in MongoDB (Employee 1:1 Resume)
+Example: Employee has one résumé.
+
+Straight-forward modeling in MongoDB
 
 * consider how you are going to access your data ? Encourage embedding or not ;
 
@@ -108,3 +110,60 @@ Why keep related document in separate collection ?
 
 * are you accessing/updating some part really often ? So it might be better to split to reduce working set size of your app ;
 * if one document is > 16Mb you won't be able to embed
+
+## One to Many Relations
+
+Example: A city as many citizens (e.g. NYC has 8 millions people).
+
+Let tries some ideas. 
+
+### A `city` collection
+
+```js
+{
+    "name": "NYC",
+    "area": …
+    "people": [ <8 millions entries?> ]
+}
+```
+
+Too much people, we are way over 16Mb
+
+### A `people` collection
+
+```js
+{
+    "name": "Edouard",
+    "city": {
+        "name": "NYC"
+        "area": …
+    }
+}
+```
+
+So much duplication can't be good. However, might be good in some design, not here.
+
+### True linking
+
+Two collections:
+
+1. `people`
+```js
+{
+    "name": "Edouard",
+    "city": "NYC"
+}
+```
+2. `city`:
+```js
+{
+    "_id": "NYC"
+}
+```
+Link from the _many_ (`people`) to _one_ (`city`) then enforce foreign keys in code.
+
+**Tip:** This is relevant when the _many_ collection is too large.
+
+### One to Few
+
+Simpler in MongoDB, just embed.
