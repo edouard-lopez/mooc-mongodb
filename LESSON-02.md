@@ -286,6 +286,12 @@ true
 * `sort()` sort results on given fields and order. (Modify information send to server).
 * `skip()` skip `n` results. (Modify information send to server).
 
+Method happen –internally– in the following order: 
+
+1. `sort()` ;
+2. `skip()` ;
+3. `limit()`
+
 ```js
 > cur=db.people.find().limit(3); null
 null
