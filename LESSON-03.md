@@ -67,3 +67,15 @@ User entry:
 * Collect all comment by a single author if you had an index on `comments.author` 
 * Not really suitable to provide a table of contents by tag. Possible through the aggregation framework.
 
+
+## Alternative Schema for Blog
+
+Alternative design could be, a collection for each:
+
+* `post` ;
+* `comments` with an extra field `post_id` and a field to preserve `order` ;
+* `tags` with an extra field `post_id`,
+
+That look like a relational design approach which may indicate **a wrong design for MongoDB**. Prefer to embed data 
+where you can, or pre-join it.
+ 
