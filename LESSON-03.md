@@ -167,3 +167,31 @@ Link from the _many_ (`people`) to _one_ (`city`) then enforce foreign keys in c
 ### One to Few
 
 Simpler in MongoDB, just embed.
+
+## Many to Many Relations
+
+### Few to Few 
+
+Example: A _book_ can have several _authors_, one _author_ can have written several _books_.
+ 
+This is actually a `Few to Few` as each book as a small number of authors and an author as a small number of books. So:
+
+```js
+// Books
+{
+  _id: 12,
+  title: <string>
+  atuhors: [27]
+}
+
+// Authors
+{
+  _id: 27,
+  author_name: <string>
+  books: [12, 4, 5]
+}
+```
+
+Example: A _student_ can have several _teachers_, one _teacher_ can have several _students_.
+
+Careful when embedding as you may need to have a _teacher_ before adding _students_ or vice-versa. 
