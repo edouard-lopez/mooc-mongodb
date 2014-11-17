@@ -79,3 +79,21 @@ Alternative design could be, a collection for each:
 That look like a relational design approach which may indicate **a wrong design for MongoDB**. Prefer to embed data 
 where you can, or pre-join it.
  
+## Living Without Constraints
+
+Relational is good a keeping data consistant in the database (cf. Foreign Key constraint). In MongoDB, there is no 
+such guarantee, you must code it or… embed data!
+
+Embedding data intrinsically provide consistency.
+
+## Living Without Transactions
+
+MongoDB has atomic operations (view all or none). There is no need to modify multiple tables when everything is 
+embedded. Hence the importance of embedding. So there is several approach:
+
+1. restructure to have a single document to leverage atomicity ;
+2. implement safe writing or whatever in your code (bof bof) ;
+3. tolerate a bit of inconsistency (no need to be perfectly in-sync).
+
+Following operations are atomic in MongoDB: `update`, `findAndModify`, `$addToSet` (within update), `$push` (within 
+update) 
