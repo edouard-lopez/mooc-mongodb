@@ -26,3 +26,44 @@ Relational models approach aim to:
 * minimize re-design when extending ;
 * **avoid biais toward any particular access pattern** ← MongoDB is **tuned** toward access pattern.
 
+## Mongo Design for Blog
+
+Blog post entry:
+
+```js
+{
+  "_id": ObjectId("…"),
+  "author": "<string>",
+  "body": "<string>",
+  "comments": [
+    {
+      "body": "<string>",
+      "email": "<string>",
+      "author": "<string>"
+    },
+    …
+  ],
+  "date": ISODate("…"),
+  "permalink": "<string>",
+  "tags": [
+    "<string>",
+    "<string>",
+    "<string>"
+  ],
+  "title": "<string>"
+}
+```
+
+User entry:
+```js
+{
+    "_id": "<string>",
+    "password": "<string>"
+}
+```
+
+* Collecting most recent blog entry would be done by a `sort()` by date and a `limit()` ;
+* Collecting all the information to display a signle post is super simple as each object is a blog post ;
+* Collect all comment by a single author if you had an index on `comments.author` 
+* Not really suitable to provide a table of contents by tag. Possible through the aggregation framework.
+
